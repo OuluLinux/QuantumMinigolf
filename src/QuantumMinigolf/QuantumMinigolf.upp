@@ -3,10 +3,12 @@ description "The game converted to U++ framework.\377";
 uses
 	CtrlLib,
 	plugin/bz2,
-	plugin/png;
+	plugin/png,
+	plugin/z;
 
-library
-	"fftw3 fftw3_threads fftw3f fftw3f_threads";
+library(!WIN32) "fftw3 fftw3_threads fftw3f fftw3f_threads";
+
+library(WIN32) "libfftw3-3 libfftw3f-3 libfftw3l-3";
 
 file
 	Copying,

@@ -16,14 +16,22 @@ MinigolfDrawer::MinigolfDrawer() :
 	MemReadStream cmap_mono_mem(cmap_mono_brc, cmap_mono_brc_length);
 	cmap_mono = PNGRaster().LoadString(BZ2Decompress(cmap_mono_mem));
 	
-	running = true;
-	stopped = false;
-	Thread::Start(THISBACK(Run));
+	Start();
 	
 	PostCallback(THISBACK(Refresher));
 }
 
 MinigolfDrawer::~MinigolfDrawer() {
+	Stop();
+}
+
+void MinigolfDrawer::Start() {
+	running = true;
+	stopped = false;
+	Thread::Start(THISBACK(Run));
+}
+
+void MinigolfDrawer::Stop() {
 	running = false;
 	while (!stopped) Sleep(100);
 }
@@ -142,6 +150,10 @@ void MinigolfDrawer::Run() {
 }
 
 void MinigolfDrawer::SetTrack(Track& track) {
+	Stop();
+	
+	state = STATE_AIMING;
+	
 	this->track = &track;
 	
 	ballx = 550;
@@ -161,6 +173,7 @@ void MinigolfDrawer::SetTrack(Track& track) {
 	// for each new track, the position propagator must be rebuilt
 	simulator.BuildPositionPropagator(track.base);
 	
+	Start();
 }
 
 void MinigolfDrawer::StopMoving() {
@@ -177,10 +190,11 @@ void MinigolfDrawer::StopMoving() {
 }
 
 void MinigolfDrawer::MouseMove(Point p, dword keyflags) {
-	
 	if (state == STATE_AIMING) {
-		double dx = p.x - ballx;
-		double dy = p.y - bally;
+		int xoff = (GetSize().cx - WIDTH) / 2;
+		int yoff = (GetSize().cy - HEIGHT) / 2;
+		double dx = p.x - ballx - xoff;
+		double dy = p.y - bally - yoff;
 		
 		racket_rphi = atan(dy / dx);
 		if (dx > 0)
@@ -222,9 +236,9 @@ void MinigolfDrawer::Paint(Draw& w) {
 	int width	= track->base.GetWidth();
 	int height	= track->base.GetHeight();
 	
-	//ImageDraw id(sz);
+	
 	ImageDraw id(width, height);
-	id.DrawRect(sz, White());
+	id.DrawRect(0,0,width,height, White());
 	
 	
 	
@@ -314,7 +328,10 @@ void MinigolfDrawer::Paint(Draw& w) {
 		lock.Leave();
 		
 		
-		w.DrawImage(0, 0, wave);
+		ImageDraw bg(sz);
+		bg.DrawRect(sz, Black());
+		bg.DrawImage((sz.cx - width) / 2, (sz.cy - height) / 2, wave);
+		w.DrawImage(0,0,bg);
 		return;
 	}
 	
@@ -334,8 +351,13 @@ void MinigolfDrawer::Paint(Draw& w) {
 		Font fnt = SansSerif(45);
 		Size txt_sz = GetTextSize(txt, fnt);
 		
-		id.DrawText((sz.cx - txt_sz.cx) / 2, (sz.cy - txt_sz.cy) / 2, txt, fnt, clr);
+		id.DrawText((width - txt_sz.cx) / 2, (height - txt_sz.cy) / 2, txt, fnt, clr);
 	}
 	
-	w.DrawImage(0,0,id);
+	ImageDraw bg(sz);
+	bg.DrawRect(sz, Black());
+	bg.DrawImage((sz.cx - width) / 2, (sz.cy - height) / 2,id);
+	
+	
+	w.DrawImage(0,0,bg);
 }

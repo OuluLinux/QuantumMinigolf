@@ -42,6 +42,8 @@ public:
 	MinigolfDrawer();
 	~MinigolfDrawer();
 	
+	void Start();
+	void Stop();
 	void Run();
 	void Refresher();
 	void StopMoving();
