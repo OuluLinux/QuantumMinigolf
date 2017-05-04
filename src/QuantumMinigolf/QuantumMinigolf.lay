@@ -1,0 +1,5 @@
+LAYOUT(QuantumMinigolfLayout, 720, 264)
+	ITEM(ArrayCtrl, tracksctrl, LeftPosZ(0, 204).VSizePosZ(0, 0))
+	ITEM(MinigolfDrawer, game, HSizePosZ(204, 0).VSizePosZ(0, 0))
+END_LAYOUT
+

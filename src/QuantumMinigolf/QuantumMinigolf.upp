@@ -1,0 +1,26 @@
+description "The game converted to U++ framework.\377";
+
+uses
+	CtrlLib,
+	plugin/bz2,
+	plugin/png;
+
+library
+	"fftw3 fftw3_threads fftw3f fftw3f_threads";
+
+file
+	Copying,
+	main.cpp,
+	imgs/imgs.brc,
+	QuantumMinigolf.h,
+	QuantumMinigolf.cpp,
+	QuantumMinigolf.rc,
+	QuantumMinigolf.lay,
+	QuantumMinigolf.iml,
+	MinigolfDrawer.cpp,
+	QuantumSimulator.h,
+	QuantumSimulator.cpp;
+
+mainconfig
+	"" = "GUI MT";
+

@@ -1,0 +1,3 @@
+BINARY_MASK(tracks_all, "*.bmp" BZ2)
+BINARY(cmap_brc, "cmap.png" BZ2)
+BINARY(cmap_mono_brc, "cmap_mono.png" BZ2)
