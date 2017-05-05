@@ -1,6 +1,6 @@
-# PhotonCtrl
+# Quantum-Minigolf
 
-This repository includes some programs derived from Quantum-Minigolf game in U++ framework.
+This repository includes the Quantum-Minigolf game ported to the U++ framework.
 
 Here is some screenshots from ported [Quantum-Minigolf](http://quantumminigolf.sourceforge.net/)
 
